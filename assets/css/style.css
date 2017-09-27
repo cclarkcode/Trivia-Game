@@ -1,0 +1,66 @@
+body {
+
+	background: url(../images/math_background.png);
+	background-size: cover;
+	/*background: no-repeat;*/
+}
+
+.container {
+	width: 1024px;
+	height: 600px;
+	margin: 50px auto;
+	position: relative;
+	background: #ffffad;
+}
+
+h1 {
+	font-size: 72px;
+	color: blue;
+	text-align: center;
+	padding: 10px;
+}
+
+.start {
+
+	position: absolute;
+	top: 55%;
+	margin: 0 320px;
+	width: 350px;
+	background: #bebebe;
+	border: thick solid blue;
+	font-size: 30px;
+	text-align: center;
+	padding: 10px;
+}
+
+.click {
+
+	cursor: pointer;
+}
+
+.game-container {
+
+	margin-top: 75px;
+	text-align: center;
+	font-size: 30px;
+	line-height: 1.5em;
+}
+
+.answers {
+
+	margin: 0 320px;
+	width: 350px;
+	font-size: 30px;
+	text-align: center;
+	padding: 10px;
+
+}
+
+.answers:hover {
+
+
+	background: #bebebe;
+	border: thick solid blue;
+	
+
+}
