@@ -1,4 +1,5 @@
 var clockID;
+// Sounds data
 var sounds = {
 	right: new Audio("assets/sounds/right.mp3"),
 	wrong: new Audio("assets/sounds/wrong.mp3"),
@@ -6,6 +7,7 @@ var sounds = {
 	endclock: new Audio('assets/sounds/endclock.mp3'),
 	buzzer: new Audio('assets/sounds/buzzer.mp3')
 }
+//
 var game = {
 	countdowntimer: 15,
 	rightcounter: 0,
@@ -31,20 +33,20 @@ var game = {
 		
 
 		game.nextquestionindex = Math.floor(Math.random()*game.question.length);
-		// game.nextquestionindex = 1;
+		
 		
 		game.nextmovies = [];
 
 	
 		var moviecheck = []
 		// Run movie call for as many times as necessary (determined by apicalls in question object array)
-		// console.log("API calls: " + game.question[game.nextquestionindex].apicalls);
+		
 		for (var i = 0; i < game.question[game.nextquestionindex].apicalls; i++) {
 
-			// alert("Index: " + i + "   Limit: " + game.question[game.nextquestionindex].apicalls);
+			
 
 			var movieindex = Math.floor(Math.random()*game.movielist.length);
-			// var movieindex = 16;
+			
 			
 			if (moviecheck.length > 0) {
 				//Verify movie hasn't already been used to avoid duplicate calls
@@ -59,14 +61,16 @@ var game = {
 			}
 
 			moviecheck.push(movieindex);
-
+			
+			// Create url string for ajax call
 			var queryURL = "https://www.omdbapi.com/?t=" + game.movielist[movieindex] + "&y=&plot=short&apikey=40e9cece";
 
 			$.ajax({
 				url: queryURL,
 				method: "GET"
 				}).done(function(response){
-
+					
+					// Push movies into an array to wait until the question uses the data
 					game.nextmovies.push(response);
 
 				}).fail(function(err) {
@@ -77,6 +81,7 @@ var game = {
 
 		
 	},
+	//Resets the game
 	start: function() {
 
 		$(".start").remove();
@@ -103,23 +108,27 @@ var game = {
 		//Pre-calls next set of movies
 		game.callmovies();
 
+		//Starts game timer
 		clockID = setInterval(game.clock,1000);
 
 
-
+		// Generate question text
 		var questiontext = game.question[game.questionindex].generateQ();
 		console.log(questiontext);
+		// Generate answers in an array with correct answer first
 		game.answers= [];
 		game.question[game.questionindex].generateA();
 		
 		console.log(game.answers);
 		console.log("Answer: " + game.rightindex);
+
+		// Randomize order of answers in answer array
 		game.answers = game.randanswer(game.answers);
 		console.log(game.answers);
 		console.log("Answer: " + game.rightindex);
 		$(".game-container").children().remove();
 
-		
+		// Display game timer
 		game.countdowntimer = 15;
 		var timer = $("<div/>");
 		var timespan = $("<span/>");
@@ -130,6 +139,7 @@ var game = {
 		timer.css("margin","10px 0 35px 0");
 		timer.attr("id","clock");
 
+		//Display questions
 		var ques = $("<div class='question'/>");
 		ques.html(questiontext);
 		ques.css("display","block");
@@ -171,13 +181,14 @@ var game = {
 
 	},
 
+	//Checks user answer to see if correct
 	checkanswer: function(answerid) {
 
 		console.log("Answerid: " + answerid + " -- game.rightindex: " + game.rightindex);
 
 		clearInterval(clockID);
 
-
+		//Resets clock sounds
 		sounds.endclock.pause();
 		sounds.endclock.load();
 
@@ -239,6 +250,7 @@ var game = {
 
 	},
 
+	//Clock logic, including changing sounds
 	clock: function() {
 
 		game.countdowntimer--;
@@ -267,6 +279,7 @@ var game = {
 
 
 	},
+	//Logic for handling expired timer
 	timeup: function(){
 
 
@@ -648,6 +661,8 @@ var game = {
 
 } //end of game object
 
+
+//Begin live script on page load
 $(document).ready (function() {
 
 	game.callmovies();
@@ -671,6 +686,7 @@ $(".game-container").on("mouseleave",".click", function() {
 	$(this).css("background","").css("border","thick hidden blue");
 
 });
+
 
 $(".game-container").on("click",".answer", function(){
 
